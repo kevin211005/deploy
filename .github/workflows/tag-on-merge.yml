@@ -33,6 +33,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    - name: Fetch main branch
+      run: git fetch origin main
+      
     - name: Create Pull Request from develop to Main
       run: |
         git config user.name "${{ github.actor }}"
