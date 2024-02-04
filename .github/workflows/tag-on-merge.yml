@@ -8,6 +8,7 @@ on:
       - main
       - develop
 
+
 jobs:
   if_merged: 
     if: github.event.pull_request.merged == true
@@ -43,3 +44,5 @@ jobs:
         git merge --no-ff "${{ github.event.pull_request.head.sha }}"
         git push origin auto-merge/main
         gh pr create --base main --head auto-merge/main --title "Auto Merge to Main" --body "This PR is automatically created upon merging into 'develop'."
+
+
