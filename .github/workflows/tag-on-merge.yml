@@ -32,18 +32,11 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-
-    - name: Fetch main branch
-      run: git fetch origin main
-
+      
     - name: Create Pull Request from develop to Main
       run: |
         git config user.name "${{ github.actor }}"
         git config user.email "${{ github.actor }}@users.noreply.github.com"
-        git checkout main
-        git pull origin main
-        git merge --no-ff "${{ github.event.pull_request.head.sha }}"
-        git push origin main
         gh pr create --base develop --head main --title "Auto Merge to Main" --body "This PR is automatically created upon merging into 'develop'."
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
