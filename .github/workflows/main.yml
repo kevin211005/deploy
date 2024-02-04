@@ -16,3 +16,11 @@ jobs:
         with:
           reporter: github-check
           eslint_flags: 'src/'
+      - name: Set PR label based on workflow status
+        if: always()
+        run: |
+          if [[ "${{ job.status }}" == "success" ]]; then
+            echo "::set-output name=label::mergeable"
+          else
+            echo "::set-output name=label::non-mergeable"
+          fi
