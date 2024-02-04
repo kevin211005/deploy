@@ -6,6 +6,8 @@ on:
       - closed
     branchs:
       - main
+      - develop
+
 
 jobs:
   if_merged: 
@@ -24,3 +26,23 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
           WITH_V: true
           PRERELEASE: true
+  create_PR_to_main:
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Create Pull Request from develop to Main
+          if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.base.ref == 'develop'
+      run: |
+        git config user.name "${{ github.actor }}"
+        git config user.email "${{ github.actor }}@users.noreply.github.com"
+        git checkout main
+        git pull origin main
+        git checkout -b auto-merge/main
+        git merge --no-ff "${{ github.event.pull_request.head.sha }}"
+        git push origin auto-merge/main
+        gh pr create --base main --head auto-merge/main --title "Auto Merge to Main" --body "This PR is automatically created upon merging into 'develop'."
+
+
