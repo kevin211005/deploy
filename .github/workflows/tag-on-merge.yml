@@ -40,5 +40,4 @@ jobs:
         gh pr create --base main --head develop --title "Auto Merge to Main" --body "This PR is auto created upon merging into 'develop'." 
       env:
         GITHUB_TOKEN: ${{ secrets.ACCESS_GITHUB_TOKEN }}
-        ###test deploy
 
