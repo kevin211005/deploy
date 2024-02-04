@@ -44,6 +44,8 @@ jobs:
         git pull origin main
         git merge --no-ff "${{ github.event.pull_request.head.sha }}"
         git push origin main
-        gh pr create --base main --head auto-merge/main --title "Auto Merge to Main" --body "This PR is automatically created upon merging into 'develop'."
+        gh pr create --base develop --head main --title "Auto Merge to Main" --body "This PR is automatically created upon merging into 'develop'."
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
