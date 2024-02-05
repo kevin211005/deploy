@@ -19,13 +19,4 @@ jobs:
         git push origin v1.0.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
-    - name: Bump version and push tag
-      uses: anothrNick/github-tag-action@1.64.0 
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
-        WITH_V: true
-        PRERELEASE: true
-        DEFAULT_BRANCH: develop
-        INITIAL_VERSION: 0.0.0
-
+      
