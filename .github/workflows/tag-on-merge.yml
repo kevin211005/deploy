@@ -1,7 +1,5 @@
 name: Create Tag on Merge to Main from develop branch
-on:
-  pull_request:
-    types: [opened, reopened]
+on: pull_request
 jobs:
   if_merged: 
     if: github.event.pull_request.merged == true
