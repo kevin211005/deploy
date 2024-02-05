@@ -6,17 +6,15 @@ jobs:
     permissions:
       contents: write
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v3
       with:
         ref: ${{ github.event.pull_request.merge_commit_sha }}
         fetch-depth: '0'
-          
-    - name: Create Tag
-      run: |
-        git config user.name "${{ github.actor }}"
-        git config user.email "${{ github.actor }}@users.noreply.github.com"
-        git tag -a v1.0.0 -m "Version 1.0.0"
-        git push origin v1.0.0
+
+    - name: Bump version and push tag
+      uses: anothrNick/github-tag-action@1.64.0 # Don't use @master or @v1 unless you're happy to test the latest version
       env:
-        GITHUB_TOKEN: ${{ secrets.ACCESS_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
+        WITH_V: true
+        PRERELEASE: true
 
