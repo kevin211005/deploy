@@ -1,15 +1,15 @@
 name: Create Tag on Merge to Main from develop branch
 on: pull_request
 jobs:
-  if_merged: 
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-22.04
     permissions:
       contents: write
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.merge_commit_sha }}
+    - uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.pull_request.merge_commit_sha }}
+        fetch-depth: '0'
           
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@1.64.0 
@@ -18,5 +18,4 @@ jobs:
           WITH_V: true
           PRERELEASE: true
           DEFAULT_BRANCH: develop
-          INITIAL_VERSION: 0.0.0
 
