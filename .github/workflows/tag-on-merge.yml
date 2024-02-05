@@ -11,11 +11,18 @@ jobs:
         ref: ${{ github.event.pull_request.merge_commit_sha }}
         fetch-depth: '0'
           
+    - name: Create Tag
+        run: |
+          git tag -a v1.0.0 -m "Version 1.0.0"
+          git push origin v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.YOUR_PAT_SECRET_NAME }}
     - name: Bump version and push tag
       uses: anothrNick/github-tag-action@1.64.0 
       env:
-        GITHUB_TOKEN: ${{ secrets.ACCESS_GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
         WITH_V: true
         PRERELEASE: true
         DEFAULT_BRANCH: develop
+        INITIAL_VERSION: 0.0.0
 
