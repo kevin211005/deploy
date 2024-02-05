@@ -12,11 +12,11 @@ jobs:
         fetch-depth: '0'
           
     - name: Create Tag
-        run: |
-          git tag -a v1.0.0 -m "Version 1.0.0"
-          git push origin v1.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.YOUR_PAT_SECRET_NAME }}
+      run: |
+        git tag -a v1.0.0 -m "Version 1.0.0"
+        git push origin v1.0.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.YOUR_PAT_SECRET_NAME }}
           
     - name: Bump version and push tag
       uses: anothrNick/github-tag-action@1.64.0 
