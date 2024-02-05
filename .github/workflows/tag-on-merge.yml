@@ -5,6 +5,7 @@ jobs:
     runs-on: ubuntu-22.04
     permissions:
       contents: write
+  create_PR_to_main:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
