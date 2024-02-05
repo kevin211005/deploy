@@ -18,7 +18,7 @@ jobs:
         git tag -a v1.0.0 -m "Version 1.0.0"
         git push origin v1.0.0
       env:
-        GITHUB_TOKEN: ${{ secrets.YOUR_PAT_SECRET_NAME }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
     - name: Bump version and push tag
       uses: anothrNick/github-tag-action@1.64.0 
