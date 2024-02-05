@@ -29,6 +29,7 @@ jobs:
           WITH_V: true
           PRERELEASE: true
           DEFAULT_BRANCH: develop
+          INITIAL_VERSION: 0.0.0
   create_PR_to_main:
     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
     runs-on: ubuntu-latest
