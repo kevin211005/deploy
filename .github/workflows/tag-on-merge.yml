@@ -2,8 +2,6 @@ name: Create Tag on Merge to Main from develop branch
 
 on:
   pull_request:
-    types:
-      - opened
     branchs:
       - main
       - develop
