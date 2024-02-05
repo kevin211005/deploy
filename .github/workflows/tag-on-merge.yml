@@ -6,7 +6,6 @@ on:
     branchs:
       - develop
 
-
 jobs:
   if_merged: 
     if: github.event.pull_request.merged == true
@@ -27,18 +26,4 @@ jobs:
           PRERELEASE: true
           DEFAULT_BRANCH: develop
           INITIAL_VERSION: 0.0.0
-  # create_PR_to_main:
-  #   if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Checkout repository
-  #     uses: actions/checkout@v2
-      
-  #   - name: Create Pull Request from develop to Main
-  #     run: |
-  #       git config user.name "${{ github.actor }}"
-  #       git config user.email "${{ github.actor }}@users.noreply.github.com"
-  #       gh pr create --base main --head develop --title "Auto Merge to Main" --body "This PR is auto created upon merging into 'develop'." 
-  #     env:
-  #       GITHUB_TOKEN: ${{ secrets.ACCESS_GITHUB_TOKEN }}
 
