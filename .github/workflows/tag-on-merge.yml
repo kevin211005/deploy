@@ -22,9 +22,9 @@ jobs:
       - run: yarn build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          repoToken: '${{ secrets.ACCESS_GITHUB_TOKEN }}'
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEPLOYTEST_8048D }}'
-          projectId: github-action-testdeploy
+          projectId: deploytest-8048d
           channelId: live
           firebaseToolsVersion: 12.9.1
   Create_Tag_on_Deploy:
