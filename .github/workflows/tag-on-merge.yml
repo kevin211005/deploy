@@ -52,15 +52,15 @@ jobs:
     permissions:
       contents: write
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-      with:
-          fetch-depth: '0'
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+            fetch-depth: '0'
 
-    - name: Bump version and push tag
-      uses: anothrNick/github-tag-action@1.64.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-        WITH_V: true
-        DEFAULT_BRANCH: develop
-        RELEASE_BRANCHES: main
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.64.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          WITH_V: true
+          DEFAULT_BRANCH: develop
+          RELEASE_BRANCHES: main
