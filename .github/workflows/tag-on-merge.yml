@@ -32,9 +32,9 @@ jobs:
     needs: Deploy
     steps:
       - name: TestCase failed
-      run: |
-        echo "Test case failed"
-        exit 1
+        run: |
+          echo "Test case failed"
+          exit 1
         
   RollBack_on_Failure:
     runs-on: ubuntu-latest
@@ -42,8 +42,8 @@ jobs:
     if: ${{ failure() }}
     steps:
       - name: Rollback
-      run: |
-        echo "Rollback"
+        run: |
+          echo "Rollback"
     
   Create_Tag_on_Deploy:
     runs-on: ubuntu-latest
