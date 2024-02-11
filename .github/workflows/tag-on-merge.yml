@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: Deploy
     steps:
-      -name: TestCase failed
+      - name: TestCase failed
       run: |
         echo "Test case failed"
         exit 1
@@ -41,7 +41,7 @@ jobs:
     needs: Simulate_Test
     if: ${{ failure() }}
     steps:
-      -name: Rollback
+      - name: Rollback
       run: |
         echo "Rollback"
     
