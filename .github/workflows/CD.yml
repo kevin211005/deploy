@@ -35,7 +35,7 @@ jobs:
           firebaseToolsVersion: 12.9.1
   Simulate_Test:
     runs-on: ubuntu-latest
-    needs: Deploy
+    needs: Deploy_to_Prod
     steps:
       - name: Simulate_Run_Test
         run: |
