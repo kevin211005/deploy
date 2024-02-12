@@ -3,7 +3,7 @@ on:
   pull_request:
     types:
       - closed
-    braches:
+    branches:
       - main
 jobs:
   Deploy_to_Prod:
