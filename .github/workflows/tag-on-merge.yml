@@ -43,8 +43,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: 
-          fetch-depth: 3
-      - run: git checkout HEAD^
+          fetch-depth: 0
+      - name: Fetch tags
+        run: git fetch --tags
+        
+      - name: Get previous version
+        id: previous_version
+        run: |
+          PREVIOUS_TAG=$(git describe --tags $(git rev-list --tags --max-count=2 | tail -n 1))
+          git checkout $PREVIOUS_TAG
+          echo "Previous tag is $PREVIOUS_TAG"
       - name: Rollback
         run: |
           echo "Rollback"
