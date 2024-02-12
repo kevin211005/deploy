@@ -54,6 +54,25 @@ jobs:
           echo "Previous tag is $PREVIOUS_TAG"
           sleep 5
 
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'yarn'
+
+      - name: Create env file
+        run: |
+          touch .env
+          echo REACT_APP_FIREBASE_API_KEY=${{ secrets.API_KEY }} >> .env
+          echo REACT_APP_FIREBASE_AUTH_DOMAIN=${{ secrets.AUTH_DOMAIN }} >> .env
+          echo REACT_APP_FIREBASE_DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
+          echo REACT_APP_FIREBASE_PROJECT_ID=${{ secrets.PROJECT_ID }} >> .env
+          echo REACT_APP_FIREBASE_STORAGE_BUCKET=${{ secrets.FIREBASE_STORAGE_BUCKET }} >> .env
+          echo REACT_APP_FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }} >> .env
+          
+      - run: yarn install
+
+      - run: yarn build
+
       - name: Perform Rollback
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
