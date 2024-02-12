@@ -41,6 +41,10 @@ jobs:
     needs: Simulate_Test
     if: ${{ failure() }}
     steps:
+      - uses: actions/checkout@v4
+        with: 
+          fetch-depth: 2
+      - run: git checkout HEAD^
       - name: Rollback
         run: |
           echo "Rollback"
