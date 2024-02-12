@@ -99,3 +99,4 @@ jobs:
           WITH_V: true
           DEFAULT_BRANCH: develop
           RELEASE_BRANCHES: main
+          BRANCH_HISTORY: last
