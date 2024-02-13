@@ -8,49 +8,47 @@ on:
 
 
 jobs:
-  Deploy_to_Dev:
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          cache: 'yarn'
-      - name: Create env file
-        run: |
-          touch .env
-          echo REACT_APP_FIREBASE_API_KEY=${{ secrets.API_KEY }} >> .env
-          echo REACT_APP_FIREBASE_AUTH_DOMAIN=${{ secrets.AUTH_DOMAIN }} >> .env
-          echo REACT_APP_FIREBASE_DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
-          echo REACT_APP_FIREBASE_PROJECT_ID=${{ secrets.PROJECT_ID }} >> .env
-          echo REACT_APP_FIREBASE_STORAGE_BUCKET=${{ secrets.FIREBASE_STORAGE_BUCKET }} >> .env
-          echo REACT_APP_FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }} >> .env
-      - run: yarn install
-      - run: yarn build
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEPLOYTEST_8048D }}'
-          projectId: deploytest-8048d
-          channelId: live
-          firebaseToolsVersion: 12.9.1
+  # Deploy_to_Dev:
+  #   if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 16
+  #         cache: 'yarn'
+  #     - name: Create env file
+  #       run: |
+  #         touch .env
+  #         echo REACT_APP_FIREBASE_API_KEY=${{ secrets.API_KEY }} >> .env
+  #         echo REACT_APP_FIREBASE_AUTH_DOMAIN=${{ secrets.AUTH_DOMAIN }} >> .env
+  #         echo REACT_APP_FIREBASE_DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
+  #         echo REACT_APP_FIREBASE_PROJECT_ID=${{ secrets.PROJECT_ID }} >> .env
+  #         echo REACT_APP_FIREBASE_STORAGE_BUCKET=${{ secrets.FIREBASE_STORAGE_BUCKET }} >> .env
+  #         echo REACT_APP_FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }} >> .env
+  #     - run: yarn install
+  #     - run: yarn build
+  #     - uses: FirebaseExtended/action-hosting-deploy@v0
+  #       with:
+  #         repoToken: '${{ secrets.GITHUB_TOKEN }}'
+  #         firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEPLOYTEST_8048D }}'
+  #         projectId: deploytest-8048d
+  #         channelId: live
+  #         firebaseToolsVersion: 12.9.1
 
   Create_PR_to_Main:
     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
-    needs: Deploy_to_Dev
+    # needs: Deploy_to_Dev
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-      
+ 
     - name: Create Pull Request from develop to Main
       run: |
         git config user.name "${{ github.actor }}"
         git config user.email "${{ github.actor }}@users.noreply.github.com"
-        COMMIT_MSG=$(git log --format=%s -2 | tail -n 1)
+        COMMIT_MSG=$(git log --format=%B -n 1 ${{ github.sha }})
         echo "Commit message is $COMMIT_MSG"
         gh pr create --base main --head develop --title "Auto Merge to Main: $COMMIT_MSG " --body "This PR is auto created upon merging into 'develop'." 
       env:

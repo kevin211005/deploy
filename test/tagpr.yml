@@ -9,7 +9,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       with:
-        token: ${{ secrets.ACCESS_GITHUB_TOKEN }}
+        token: ${{ secrets.GH_PAT }}
     - uses: Songmu/tagpr@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.ACCESS_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+
