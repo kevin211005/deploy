@@ -50,7 +50,7 @@ jobs:
       run: |
         git config user.name "${{ github.actor }}"
         git config user.email "${{ github.actor }}@users.noreply.github.com"
-        COMMIT_MSG=$(git log --format=%s -2 | tail -n 1)
+        COMMIT_MSG=$(git log --format=%B -n 1 ${{ github.sha }})
         echo "Commit message is $COMMIT_MSG"
         gh pr create --base main --head develop --title "Auto Merge to Main: $COMMIT_MSG " --body "This PR is auto created upon merging into 'develop'." 
       env:
