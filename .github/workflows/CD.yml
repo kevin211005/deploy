@@ -1,4 +1,4 @@
-name: Create Tag on Merge to Main from develop branch
+name: Continuous Deployment when PR is merged to main
 on: 
   pull_request:
     types:
