@@ -1,4 +1,4 @@
-name: Continuous Deployment when PR is merged to main
+name: CD when PR is merged to main
 on: 
   pull_request:
     types:
