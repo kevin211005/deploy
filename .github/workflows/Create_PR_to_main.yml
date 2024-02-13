@@ -22,5 +22,5 @@ jobs:
         COMMIT_MSG=$(git log --format=%B -n 1 ${{ github.sha }})
         gh pr create --base main --head develop --title "Auto Merge to Main $COMMIT_MSG " --body "This PR is auto created upon merging into 'develop'." 
       env:
-        GITHUB_TOKEN: ${{ secrets.ACCESS_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
