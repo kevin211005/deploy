@@ -33,14 +33,13 @@ function App() {
 
   return (
     <Box >
-      <h1>This is deploy test V6</h1>
+      <h1>This is deploy test V1-12 test too3123</h1>
       {
         data.map((item, index) => (
           <Chip key={index} label={item} />
         ))
       }
       <h1>check force push</h1>
-      <h1>This is deploy test V6</h1>
     </Box>
   );
 }
