@@ -1,4 +1,4 @@
-name: Auto create PR from develop to main and deploy changes to Dev environment
+name: Auto create PR and deploy to Dev 
 on:
   pull_request:
     types:
