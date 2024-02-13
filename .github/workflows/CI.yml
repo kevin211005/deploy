@@ -1,4 +1,4 @@
-name: Continuous Integration when PR is created or updated
+name: CI when PR is created or updated
 on: 
   pull_request:
     branches:
