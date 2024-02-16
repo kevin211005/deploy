@@ -45,7 +45,7 @@ jobs:
           FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          FIREBASE_SERVICE_ACCOUNT_DEPLOYTEST_8048D: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEPLOYTEST_8048D }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEPLOYTEST_8048D }}
           LIVESITE: false 
   Deploy_to_Cloud_Functions:
     runs-on: ubuntu-latest

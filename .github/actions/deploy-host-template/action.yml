@@ -47,12 +47,15 @@ runs:
         echo "REACT_APP_FIREBASE_STORAGE_BUCKET=${{ inputs.FIREBASE_STORAGE_BUCKET }}" >> .env
         echo "REACT_APP_FIREBASE_APP_ID=${{ inputs.FIREBASE_APP_ID }}" >> .env
       shell: bash
-
-    - name: Install yarn and build
-      run: |
-        yarn install
-        yarn build
-      shell: bash
+    #   - uses: actions/setup-node@v3
+    #     with:
+    #       node-version: 16
+    #       cache: 'yarn'
+    # - name: Install yarn and build
+    #   run: |
+    #     yarn install
+    #     yarn build
+    #   shell: bash
     - name: Check deploy to live site
       run: echo "Deploy to live site expires in $EXPIRES and is on channel $CHANNEL_ID"
       shell: bash
