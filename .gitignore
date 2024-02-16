@@ -30,7 +30,8 @@ yarn-debug.log*
 yarn-error.log*
 env.example
 .vscode/launch.json
-functions/.env.nex-work-qa
+functions/.env
+functions/node_modules
 # firebase emulators
 .firebase
 *-debug.log
