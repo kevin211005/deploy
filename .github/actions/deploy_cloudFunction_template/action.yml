@@ -27,10 +27,10 @@ runs:
           run: |
            cd functions
            touch .env
-           echo TEST_OUTPUT=$FIREBASE_TOKEN >> .env
+           echo TEST_OUTPUT=$TEST_SECRET >> .env
            npm install
            cd ..
-           firebase deploy --only functions --token $TEST_SECRET
+           firebase deploy --only functions --token $FIREBASE_TOKEN
           shell: bash
           env:
             FIREBASE_TOKEN: ${{ inputs.FIREBASE_TOKEN }}
