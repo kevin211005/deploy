@@ -38,7 +38,7 @@ jobs:
   Deploy_to_Cloud_Functions:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
       - name: Deploy to Cloud Functions
         uses: ./.github/actions/deploy_cloudFunction_template@1
 
