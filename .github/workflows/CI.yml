@@ -58,6 +58,8 @@ jobs:
         if: steps.changed-functions-files.outputs.any_changed == 'true'
         run: |
           cd functions
+          touch .env
+          echo TEST_OUTPUT=${{ secrets.TEST_SECRET}} >> .env
           npm install
           cd ..
           firebase deploy --only functions --token ${{ secrets.FIREBASE_TOKEN }}
