@@ -47,29 +47,29 @@ runs:
         echo "REACT_APP_FIREBASE_STORAGE_BUCKET=${{ inputs.FIREBASE_STORAGE_BUCKET }}" >> .env
         echo "REACT_APP_FIREBASE_APP_ID=${{ inputs.FIREBASE_APP_ID }}" >> .env
       shell: bash
-    #   - uses: actions/setup-node@v3
-    #     with:
-    #       node-version: 16
-    #       cache: 'yarn'
-    # - name: Install yarn and build
-    #   run: |
-    #     yarn install
-    #     yarn build
-    #   shell: bash
-    - name: Check deploy to live site
-      run: echo "Deploy to live site expires in ${EXPIRES} and is on channel ${CHANNEL_ID}"
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'yarn'
+    - name: Install yarn and build
+      run: |
+        yarn install
+        yarn build
       shell: bash
-      env:
-        EXPIRES: ${{ steps.check_live_site.outputs.is_live == 'false' && '30D' || '' }}
-        CHANNEL_ID: ${{ steps.check_live_site.outputs.is_live == 'true' && 'live' || '' }}
-    # - uses: FirebaseExtended/action-hosting-deploy@v0
-    #   with:
-    #     repoToken: ${{ inputs.GITHUB_TOKEN }}
-    #     firebaseServiceAccount: ${{ inputs.FIREBASE_SERVICE_ACCOUNT }}
-    #     projectId: ${{ inputs.PROJECT_ID }}
-    #     expires: $EXPIRES
-    #     channelId: $CHANNEL_ID
-    #     firebaseToolsVersion: 12.9.1
+    # - name: Check deploy to live site
+    #   run: echo "Deploy to live site expires in ${EXPIRES} and is on channel ${CHANNEL_ID}"
+    #   shell: bash
     #   env:
     #     EXPIRES: ${{ steps.check_live_site.outputs.is_live == 'false' && '30D' || '' }}
     #     CHANNEL_ID: ${{ steps.check_live_site.outputs.is_live == 'true' && 'live' || '' }}
+    - uses: FirebaseExtended/action-hosting-deploy@v0
+      with:
+        repoToken: ${{ inputs.GITHUB_TOKEN }}
+        firebaseServiceAccount: ${{ inputs.FIREBASE_SERVICE_ACCOUNT }}
+        projectId: ${{ inputs.PROJECT_ID }}
+        expires: $EXPIRES
+        channelId: $CHANNEL_ID
+        firebaseToolsVersion: 12.9.1
+      env:
+        EXPIRES: ${{ steps.check_live_site.outputs.is_live == 'false' && '30D' || '' }}
+        CHANNEL_ID: ${{ steps.check_live_site.outputs.is_live == 'true' && 'live' || '' }}
