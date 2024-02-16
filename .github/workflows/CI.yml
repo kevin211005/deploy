@@ -57,6 +57,9 @@ jobs:
       - name: Deploy to Cloud Functions
         if: steps.changed-functions-files.outputs.any_changed == 'true'
         run: |
+          cd functions
+          npm install
+          cd ..
           firebase deploy --only functions --token ${{ secrets.FIREBASE_TOKEN }}
 
   Simulate_Test:
