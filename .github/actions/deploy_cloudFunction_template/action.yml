@@ -1,15 +1,20 @@
 name: Deploy_to_Cloud_Functions
 description: 'Deploy to Cloud Functions'
+inputs:
+  FIREBASE_TOKEN:
+    description: 'Firebase token'
+    required: true
+  TEST_SECRET:
+    description: 'Test secret'
+    required: true
 runs: 
     using: 'composite'
     steps:
         - uses: actions/checkout@v4
-          shell: bash
         - uses: actions/setup-node@v3
           with:
             node-version: 16
             cache: 'yarn'
-          shell: bash
         - name: Install Firebase Tools
           run: yarn global add firebase-tools@12.9.1
           shell: bash
@@ -18,14 +23,16 @@ runs:
           uses: tj-actions/changed-files@v42
           with:
             files: 'functions/**'
-          shell: bash
         - name: Deploy to Cloud Functions
           if: steps.changed-functions-files.outputs.any_changed == 'true'
           run: |
            cd functions
            touch .env
-           echo TEST_OUTPUT=${{ secrets.TEST_SECRET}} >> .env
+           echo TEST_OUTPUT=$FIREBASE_TOKEN >> .env
            npm install
            cd ..
-           firebase deploy --only functions --token ${{ secrets.FIREBASE_TOKEN }}
+           firebase deploy --only functions --token $TEST_SECRET
           shell: bash
+          env:
+            FIREBASE_TOKEN: ${{ inputs.FIREBASE_TOKEN }}
+            TEST_SECRET: ${{ inputs.TEST_SECRET }}
