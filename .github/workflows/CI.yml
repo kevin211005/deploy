@@ -31,6 +31,22 @@ jobs:
   #         projectId: deploytest-8048d
   #         expires: 30d
   #         firebaseToolsVersion: 12.9.1
+  Build_and_Preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and Preview
+        uses: ./.github/actions/build_and_preview_template
+        with:
+          API_KEY: ${{ secrets.API_KEY }}
+          AUTH_DOMAIN: ${{ secrets.AUTH_DOMAIN }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          PROJECT_ID: ${{ secrets.PROJECT_ID }}
+          FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FIREBASE_SERVICE_ACCOUNT_DEPLOYTEST_8048D: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEPLOYTEST_8048D }}
+          LIVESITE: false 
   Deploy_to_Cloud_Functions:
     runs-on: ubuntu-latest
     # needs: Build_and_Preview

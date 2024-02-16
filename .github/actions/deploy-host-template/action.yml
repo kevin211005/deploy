@@ -1,0 +1,64 @@
+name: Deplopy to Firebase Host
+description: 'Deploy to Firebase Host'
+inputs: 
+  API_KEY:
+    description: 'API Key'
+    required: true
+  AUTH_DOMAIN:
+    description: 'Auth Domain'
+    required: true
+  DATABASE_URL:
+    description: 'Database URL'
+    required: true
+  PROJECT_ID:
+    description: 'Project ID'
+    required: true
+  STORAGE_BUCKET:
+    description: 'Storage Bucket'
+    required: true
+  APP_ID:
+    description: 'App ID'
+    required: true
+  GITHUB_TOKEN:
+    description: 'Github Token'
+    required: true
+  FIREBASE_SERVICE_ACCOUNT:
+    description: 'Firebase Service Account'
+    required: true
+  LIVESITE:
+    description: 'Live Site'
+    required: true
+
+runs: 
+  using: 'composite'
+  steps:
+    - name: Check if deploy to Live Site
+      id: check_live_site
+      run: echo "::set-output name=is_live::${{ inputs.liveSite == 'true' }}"
+      shell: bash
+
+    - name: Create .env File
+      run: |
+        touch .env
+        echo "REACT_APP_FIREBASE_API_KEY=${{ inputs.API_KEY }}" >> .env
+        echo "REACT_APP_FIREBASE_AUTH_DOMAIN=${{ inputs.AUTH_DOMAIN }}" >> .env
+        echo "REACT_APP_FIREBASE_DATABASE_URL=${{ inputs.DATABASE_URL }}" >> .env
+        echo "REACT_APP_FIREBASE_PROJECT_ID=${{ inputs.PROJECT_ID }}" >> .env
+        echo "REACT_APP_FIREBASE_STORAGE_BUCKET=${{ inputs.STORAGE_BUCKET }}" >> .env
+        echo "REACT_APP_FIREBASE_APP_ID=${{ inputs.APP_ID }}" >> .env
+      shell: bash
+
+    - name: Install yarn and build
+      run: |
+        yarn install
+        yarn build
+      shell: bash
+
+    - uses: FirebaseExtended/action-hosting-deploy@v0
+      with:
+        repoToken: ${{ inputs.GITHUB_TOKEN }}
+        firebaseServiceAccount: ${{ inputs.FIREBASE_SERVICE_ACCOUNT }}
+        projectId: ${{ inputs.PROJECT_ID }}
+        expires: ${{ if steps.check_live_site.outputs.is_live == 'false' }}30d{{ endif }}
+        channelId: ${{ if steps.check_live_site.outputs.is_live == 'true' }}live{{ endif }}
+        firebaseToolsVersion: 12.9.1
