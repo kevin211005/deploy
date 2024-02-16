@@ -46,7 +46,7 @@ jobs:
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEPLOYTEST_8048D }}
-          LIVESITE: false 
+          LIVESITE: true 
   Deploy_to_Cloud_Functions:
     runs-on: ubuntu-latest
     needs: Build_and_Preview
