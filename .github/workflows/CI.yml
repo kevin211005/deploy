@@ -36,33 +36,7 @@ jobs:
   #     #     expires: 30d
   #     #     firebaseToolsVersion: 12.9.1
   Deploy_to_Cloud_Functions:
-    runs-on: ubuntu-latest
-    # needs: Build_and_Preview
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          cache: 'yarn'
-
-      - name: Install Firebase Tools
-        run: yarn global add firebase-tools@12.9.1
-
-      - name: Check for changes in functions folder 
-        id: changed-functions-files
-        uses: tj-actions/changed-files@v42
-        with:
-          files: 'functions/**'
-
-      - name: Deploy to Cloud Functions
-        if: steps.changed-functions-files.outputs.any_changed == 'true'
-        run: |
-          cd functions
-          touch .env
-          echo TEST_OUTPUT=${{ secrets.TEST_SECRET}} >> .env
-          npm install
-          cd ..
-          firebase deploy --only functions --token ${{ secrets.FIREBASE_TOKEN }}
+    uses: ./.github/actions/deploy-to-cloud-functions
 
   Simulate_Test:
     runs-on: ubuntu-latest
