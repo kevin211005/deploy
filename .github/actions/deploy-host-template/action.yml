@@ -59,6 +59,9 @@ runs:
         repoToken: ${{ inputs.GITHUB_TOKEN }}
         firebaseServiceAccount: ${{ inputs.FIREBASE_SERVICE_ACCOUNT }}
         projectId: ${{ inputs.PROJECT_ID }}
-        expires: ${{ if steps.check_live_site.outputs.is_live == 'false' }}30d{{ endif }}
-        channelId: ${{ if steps.check_live_site.outputs.is_live == 'true' }}live{{ endif }}
+        expires: $EXPIRES
+        channelId: $CHANNEL_ID
         firebaseToolsVersion: 12.9.1
+      env:
+        EXPIRES: ${{ steps.check_live_site.outputs.is_live == 'false' && '30D' || '' }}
+        CHANNEL_ID: ${{ steps.check_live_site.outputs.is_live == 'true' && 'live' || '' }}

@@ -49,7 +49,7 @@ jobs:
           LIVESITE: false 
   Deploy_to_Cloud_Functions:
     runs-on: ubuntu-latest
-    # needs: Build_and_Preview
+    needs: Build_and_Preview
     steps:
       - uses: actions/checkout@v4
       - name: Deploy to Cloud Functions
