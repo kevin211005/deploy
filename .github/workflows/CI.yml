@@ -38,9 +38,12 @@ jobs:
   Deploy_to_Cloud_Functions:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Deploy to Cloud Functions
         uses: ./.github/actions/deploy_cloudFunction_template
+        with:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          TEST_SECRET: ${{ secrets.TEST_SECRET }}
 
   Simulate_Test:
     runs-on: ubuntu-latest
