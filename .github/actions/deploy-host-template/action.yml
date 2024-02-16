@@ -34,7 +34,7 @@ runs:
   steps:
     - name: Check if deploy to Live Site
       id: check_live_site
-      run: echo "::set-output name=is_live::${{ inputs.liveSite == 'true' }}"
+      run: echo "is_live=${{ inputs.liveSite == 'true' }}" >> $GITHUB_OUTPUT
       shell: bash
 
     - name: Create .env File
@@ -56,12 +56,7 @@ runs:
         yarn install
         yarn build
       shell: bash
-    # - name: Check deploy to live site
-    #   run: echo "Deploy to live site expires in ${EXPIRES} and is on channel ${CHANNEL_ID}"
-    #   shell: bash
-    #   env:
-    #     EXPIRES: ${{ steps.check_live_site.outputs.is_live == 'false' && '30D' || '' }}
-    #     CHANNEL_ID: ${{ steps.check_live_site.outputs.is_live == 'true' && 'live' || '' }}
+
     - uses: FirebaseExtended/action-hosting-deploy@v0
       with:
         repoToken: ${{ inputs.GITHUB_TOKEN }}
@@ -73,3 +68,10 @@ runs:
       env:
         EXPIRES: ${{ steps.check_live_site.outputs.is_live == 'false' && '30D' || '' }}
         CHANNEL_ID: ${{ steps.check_live_site.outputs.is_live == 'true' && 'live' || '' }}
+    
+    # - name: Check deploy to live site
+    #   run: echo "Deploy to live site expires in ${EXPIRES} and is on channel ${CHANNEL_ID}"
+    #   shell: bash
+    #   env:
+    #     EXPIRES: ${{ steps.check_live_site.outputs.is_live == 'false' && '30D' || '' }}
+    #     CHANNEL_ID: ${{ steps.check_live_site.outputs.is_live == 'true' && 'live' || '' }}
