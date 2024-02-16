@@ -38,8 +38,9 @@ jobs:
   Deploy_to_Cloud_Functions:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Deploy to Cloud Functions
-        uses: ./.github/actions/deploy-to-cloud-functions
+        uses: ./.github/actions/deploy-to-cloud-functions@1
 
   Simulate_Test:
     runs-on: ubuntu-latest
