@@ -36,7 +36,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build and Preview
-        uses: ./.github/actions/build_and_preview_template
+        uses: ./.github/actions/deploy-host-template
         with:
           API_KEY: ${{ secrets.API_KEY }}
           AUTH_DOMAIN: ${{ secrets.AUTH_DOMAIN }}
