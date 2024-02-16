@@ -13,10 +13,10 @@ inputs:
   PROJECT_ID:
     description: 'Project ID'
     required: true
-  STORAGE_BUCKET:
+  FIREBASE_STORAGE_BUCKET:
     description: 'Storage Bucket'
     required: true
-  APP_ID:
+  FIREBASE_APP_ID:
     description: 'App ID'
     required: true
   GITHUB_TOKEN:
@@ -44,8 +44,8 @@ runs:
         echo "REACT_APP_FIREBASE_AUTH_DOMAIN=${{ inputs.AUTH_DOMAIN }}" >> .env
         echo "REACT_APP_FIREBASE_DATABASE_URL=${{ inputs.DATABASE_URL }}" >> .env
         echo "REACT_APP_FIREBASE_PROJECT_ID=${{ inputs.PROJECT_ID }}" >> .env
-        echo "REACT_APP_FIREBASE_STORAGE_BUCKET=${{ inputs.STORAGE_BUCKET }}" >> .env
-        echo "REACT_APP_FIREBASE_APP_ID=${{ inputs.APP_ID }}" >> .env
+        echo "REACT_APP_FIREBASE_STORAGE_BUCKET=${{ inputs.FIREBASE_STORAGE_BUCKET }}" >> .env
+        echo "REACT_APP_FIREBASE_APP_ID=${{ inputs.FIREBASE_APP_ID }}" >> .env
       shell: bash
 
     - name: Install yarn and build
@@ -53,15 +53,20 @@ runs:
         yarn install
         yarn build
       shell: bash
-
-    - uses: FirebaseExtended/action-hosting-deploy@v0
-      with:
-        repoToken: ${{ inputs.GITHUB_TOKEN }}
-        firebaseServiceAccount: ${{ inputs.FIREBASE_SERVICE_ACCOUNT }}
-        projectId: ${{ inputs.PROJECT_ID }}
-        expires: $EXPIRES
-        channelId: $CHANNEL_ID
-        firebaseToolsVersion: 12.9.1
+    - name: Check deploy to live site
+      run: echo "Deploy to live site expires in $EXPIRES and is on channel $CHANNEL_ID"
+      shell: bash
       env:
         EXPIRES: ${{ steps.check_live_site.outputs.is_live == 'false' && '30D' || '' }}
         CHANNEL_ID: ${{ steps.check_live_site.outputs.is_live == 'true' && 'live' || '' }}
+    # - uses: FirebaseExtended/action-hosting-deploy@v0
+    #   with:
+    #     repoToken: ${{ inputs.GITHUB_TOKEN }}
+    #     firebaseServiceAccount: ${{ inputs.FIREBASE_SERVICE_ACCOUNT }}
+    #     projectId: ${{ inputs.PROJECT_ID }}
+    #     expires: $EXPIRES
+    #     channelId: $CHANNEL_ID
+    #     firebaseToolsVersion: 12.9.1
+    #   env:
+    #     EXPIRES: ${{ steps.check_live_site.outputs.is_live == 'false' && '30D' || '' }}
+    #     CHANNEL_ID: ${{ steps.check_live_site.outputs.is_live == 'true' && 'live' || '' }}
