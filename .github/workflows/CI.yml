@@ -47,14 +47,16 @@ jobs:
           cache: 'yarn'
       - name: Install Firebase Tools
         run: yarn global add firebase-tools@12.9.1
+      - name: Check for changes in functions folder 
+        id: changed-functions-files
+        uses: tj-actions/changed-files@v42
+        with:
+          files: 'functions/**'
       - name: Deploy to Cloud Functions
+        if: steps.changed-functions-files.outputs.any_changed == 'true'
         run: |
-          if git diff --name-only HEAD^..HEAD | grep '^functions/' > /dev/null; then
-            echo "functions  folder has been changed."
-            # firebase deploy --only functions --token ${{ secrets.FIREBASE_TOKEN }}
-          else
-            echo "No changes in the specific folder."
-          fi
+          echo "functions  folder has been changed."
+
 
   Simulate_Test:
     runs-on: ubuntu-latest
