@@ -40,7 +40,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Deploy to Cloud Functions
-        uses: actions/deploy_cloudFunction_template@1
+        uses: ./.github/actions/deploy_cloudFunction_template@1
 
   Simulate_Test:
     runs-on: ubuntu-latest
