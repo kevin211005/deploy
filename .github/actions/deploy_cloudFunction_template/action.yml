@@ -10,14 +10,12 @@ inputs:
 runs: 
     using: 'composite'
     steps:
-        - uses: actions/checkout@v4
         - uses: actions/setup-node@v3
           with:
             node-version: 16
             cache: 'yarn'
         - name: Install Firebase Tools
           run: yarn global add firebase-tools@12.9.1
-          shell: bash
         - name: Check for changes in functions folder 
           id: changed-functions-files
           uses: tj-actions/changed-files@v42
@@ -32,7 +30,6 @@ runs:
            npm install
            cd ..
            firebase deploy --only functions --token $FIREBASE_TOKEN
-          shell: bash
           env:
             FIREBASE_TOKEN: ${{ inputs.FIREBASE_TOKEN }}
             TEST_SECRET: ${{ inputs.TEST_SECRET }}
