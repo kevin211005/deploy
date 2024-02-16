@@ -1,6 +1,7 @@
 name: Deploy_to_Cloud_Functions
 description: 'Deploy to Cloud Functions'
 runs: 
+    shell: bash
     using: 'composite'
     steps:
         - uses: actions/setup-node@v3
