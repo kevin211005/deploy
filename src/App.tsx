@@ -19,7 +19,7 @@ function App() {
     appId: process.env.REACT_APP_FIREBASE_APP_ID,
     measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
   }; 
-  const fetchData = async () => {
+  const reloadData = async () => {
     const db = getFirestore(app);
     const testDB = collection(db, 'TestData');
     const snapshot = await getDocs(testDB);
@@ -29,15 +29,23 @@ function App() {
   }
   const app = initializeApp(config);
   useEffect(() => {
+    const fetchData = async () => {
+      const db = getFirestore(app);
+      const testDB = collection(db, 'TestData');
+      const snapshot = await getDocs(testDB);
+      const docsData = snapshot.docs.map(doc => doc.data());
+      const data = docsData.map((doc: any) => doc.Data);
+      setData(data);
+    }
     fetchData();
-  }, [app, fetchData]);
+  }, [app]);
 
   const addTag = async() => {
     const newTag = 'New Tag +' + (data.length + 1);
     const db = getFirestore(app);
     const testDB = collection(db, 'TestData');
     addDoc(testDB, {Data: newTag});
-    fetchData();
+    reloadData();
   };
   return (
     <Box >
