@@ -1,12 +1,27 @@
-name: 'Hello World'
-description: 'Greet someone'
-outputs:
-  random-number:
-    description: "Random number"
-    value: ${{ steps.random-number-generator.outputs.random-number }}
-runs:
-  using: "composite"
-  steps:
-    - name: Set Greeting
-      run: echo "Hello "
-      shell: bash
+name: Deploy_to_Cloud_Functions
+description: 'Deploy to Cloud Functions'
+runs: 
+    using: 'composite'
+    steps:
+        - uses: actions/setup-node@v3
+          with:
+            node-version: 16
+            cache: 'yarn'
+        - name: Install Firebase Tools
+          run: yarn global add firebase-tools@12.9.1
+          shell: bash
+        - name: Check for changes in functions folder 
+          id: changed-functions-files
+          uses: tj-actions/changed-files@v42
+          with:
+            files: 'functions/**'
+        - name: Deploy to Cloud Functions
+          if: steps.changed-functions-files.outputs.any_changed == 'true'
+          run: |
+           cd functions
+           touch .env
+           echo TEST_OUTPUT=${{ secrets.TEST_SECRET}} >> .env
+           npm install
+           cd ..
+           firebase deploy --only functions --token ${{ secrets.FIREBASE_TOKEN }}
+          shell: bash
