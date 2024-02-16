@@ -36,7 +36,10 @@ jobs:
   #     #     expires: 30d
   #     #     firebaseToolsVersion: 12.9.1
   Deploy_to_Cloud_Functions:
-    uses: ./.github/actions/deploy-to-cloud-functions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Cloud Functions
+        uses: ./.github/actions/deploy-to-cloud-functions
 
   Simulate_Test:
     runs-on: ubuntu-latest
