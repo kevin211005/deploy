@@ -47,10 +47,10 @@ runs:
         echo "REACT_APP_FIREBASE_STORAGE_BUCKET=${{ inputs.FIREBASE_STORAGE_BUCKET }}" >> .env
         echo "REACT_APP_FIREBASE_APP_ID=${{ inputs.FIREBASE_APP_ID }}" >> .env
       shell: bash
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          cache: 'yarn'
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+        cache: 'yarn'
     - name: Install yarn and build
       run: |
         yarn install
