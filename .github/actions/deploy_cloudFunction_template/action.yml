@@ -13,18 +13,23 @@ runs:
         # - name: test flow
         #   run: echo "This just a test"
         #   shell: bash
-        - uses: actions/setup-node@v3
-          with:
-            node-version: 16
-            cache: 'yarn'
-        - name: Install Firebase Tools
-          run: yarn global add firebase-tools@12.9.1
-          shell: bash
         - name: Check for changes in functions folder 
           id: changed-functions-files
           uses: tj-actions/changed-files@v42
           with:
             files: 'functions/**'
+
+        - uses: actions/setup-node@v3
+          if: steps.changed-functions-files.outputs.any_changed == 'true'
+          with:
+            node-version: 16
+            cache: 'yarn'
+
+        - name: Install Firebase Tools
+          if: steps.changed-functions-files.outputs.any_changed == 'true'
+          run: yarn global add firebase-tools@12.9.1
+          shell: bash
+          
         - name: Deploy to Cloud Functions
           if: steps.changed-functions-files.outputs.any_changed == 'true'
           run: |
