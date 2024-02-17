@@ -62,12 +62,10 @@ runs:
         repoToken: ${{ inputs.GITHUB_TOKEN }}
         firebaseServiceAccount: ${{ inputs.FIREBASE_SERVICE_ACCOUNT }}
         projectId: ${{ inputs.PROJECT_ID }}
-        expires: ${{ EXPIRES }}
-        channelId: ${{ CHANNEL_ID }}
+        expires: ${{ steps.check_live_site.outputs.is_live == 'false' && '30d' || '' }}
+        channelId: ${{ steps.check_live_site.outputs.is_live == 'true' && 'live' || '' }}
         firebaseToolsVersion: 12.9.1
-      env:
-        EXPIRES: ${{ steps.check_live_site.outputs.is_live == 'false' && '30d' || '' }}
-        CHANNEL_ID: ${{ steps.check_live_site.outputs.is_live == 'true' && 'live' || '' }}
+
     
     # - name: Check deploy to live site
     #   run: echo "Deploy to live site expires in ${EXPIRES} and is on channel ${CHANNEL_ID}"
