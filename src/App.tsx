@@ -1,11 +1,12 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import {Chip, Box} from '@material-ui/core';
+import {Chip, Box, Button} from '@material-ui/core';
 import { initializeApp } from 'firebase/app';
 import {
   getFirestore,
   collection,
   getDocs, 
+  addDoc,
 } from 'firebase/firestore';
 function App() {
   const [data, setData] = useState<string[]>([]);
@@ -18,6 +19,14 @@ function App() {
     appId: process.env.REACT_APP_FIREBASE_APP_ID,
     measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
   }; 
+  const reloadData = async () => {
+    const db = getFirestore(app);
+    const testDB = collection(db, 'TestData');
+    const snapshot = await getDocs(testDB);
+    const docsData = snapshot.docs.map(doc => doc.data());
+    const data = docsData.map((doc: any) => doc.Data);
+    setData(data);
+  }
   const app = initializeApp(config);
   useEffect(() => {
     const fetchData = async () => {
@@ -31,6 +40,13 @@ function App() {
     fetchData();
   }, [app]);
 
+  const addTag = async() => {
+    const newTag = 'New Tag +' + (data.length + 1);
+    const db = getFirestore(app);
+    const testDB = collection(db, 'TestData');
+    addDoc(testDB, {Data: newTag});
+    reloadData();
+  };
   return (
     <Box >
       <h1>This is deploy test V9</h1>
@@ -40,7 +56,7 @@ function App() {
         ))
       }
       <h1>check force push</h1>
-      <h1>This is deploy test V6</h1>
+      <Button variant="contained" color="primary" onClick={addTag}> Add one Tag</Button>
     </Box>
   );
 }
