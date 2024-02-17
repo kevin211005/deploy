@@ -6,43 +6,45 @@ on:
     branches:
       - main
 jobs:
-  Deploy_to_Prod:
+  Deploy_host_to_Prod:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - name: Deploy_to_Prod
+        uses: ./.github/actions/deploy-host-template
         with:
-          node-version: 16
-          cache: 'yarn'
-      - name: Create env file
-        run: |
-          touch .env
-          echo REACT_APP_FIREBASE_API_KEY=${{ secrets.API_KEY }} >> .env
-          echo REACT_APP_FIREBASE_AUTH_DOMAIN=${{ secrets.AUTH_DOMAIN }} >> .env
-          echo REACT_APP_FIREBASE_DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
-          echo REACT_APP_FIREBASE_PROJECT_ID=${{ secrets.PROJECT_ID }} >> .env
-          echo REACT_APP_FIREBASE_STORAGE_BUCKET=${{ secrets.FIREBASE_STORAGE_BUCKET }} >> .env
-          echo REACT_APP_FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }} >> .env
-      - run: yarn install
-      - run: yarn build
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+          API_KEY: ${{ secrets.API_KEY }}
+          AUTH_DOMAIN: ${{ secrets.AUTH_DOMAIN }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          PROJECT_ID: ${{ secrets.PROJECT_ID }}
+          FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEPLOYTEST_8048D }}
+          LIVESITE: true 
+
+  Deploy_Cloud_Function_to_Prod:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy_to_Cloud_Function
+        uses: ./.github/actions/deploy_cloudFunction_template
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEPLOYTEST_8048D }}'
-          projectId: deploytest-8048d
-          channelId: live
-          firebaseToolsVersion: 12.9.1
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          TEST_SECRET: ${{ secrets.TEST_SECRET }}
+
   Simulate_Test:
     runs-on: ubuntu-latest
-    needs: Deploy_to_Prod
+    needs: [Deploy_host_to_Prod, Deploy_Cloud_Function_to_Prod]
     steps:
       - name: Simulate_Run_Test
         run: |
           echo "Test case success"
           exit 0
         
-  RollBack_on_Failure:
+  RollBack_Host_on_Failure:
     runs-on: ubuntu-latest
     needs: Simulate_Test
     if: ${{ failure() }}
@@ -60,34 +62,43 @@ jobs:
           echo "Previous tag is $PREVIOUS_TAG"
           sleep 5
 
-      - uses: actions/setup-node@v3
+      - name: Roll back host to previous version
+        uses: ./.github/actions/deploy-host-template
         with:
-          node-version: 16
-          cache: 'yarn'
+          API_KEY: ${{ secrets.API_KEY }}
+          AUTH_DOMAIN: ${{ secrets.AUTH_DOMAIN }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          PROJECT_ID: ${{ secrets.PROJECT_ID }}
+          FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEPLOYTEST_8048D }}
+          LIVESITE: true 
 
-      - name: Create env file
+  Roll_Back_Cloud_Function_on_Failure:
+    runs-on: ubuntu-latest
+    needs: Simulate_Test
+    if: ${{ failure() }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch tags
+        run: git fetch --tags
+        
+      - name: Get previous version
+        id: previous_version
         run: |
-          touch .env
-          echo REACT_APP_FIREBASE_API_KEY=${{ secrets.API_KEY }} >> .env
-          echo REACT_APP_FIREBASE_AUTH_DOMAIN=${{ secrets.AUTH_DOMAIN }} >> .env
-          echo REACT_APP_FIREBASE_DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
-          echo REACT_APP_FIREBASE_PROJECT_ID=${{ secrets.PROJECT_ID }} >> .env
-          echo REACT_APP_FIREBASE_STORAGE_BUCKET=${{ secrets.FIREBASE_STORAGE_BUCKET }} >> .env
-          echo REACT_APP_FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }} >> .env
-          
-      - run: yarn install
+          PREVIOUS_TAG=$(git describe --tags $(git rev-list --tags --max-count=1 | tail -n 1))
+          git checkout $PREVIOUS_TAG
+          echo "Previous tag is $PREVIOUS_TAG"
+          sleep 5
 
-      - run: yarn build
-
-      - name: Perform Rollback
-        uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Roll back cloud function to previous_version
+        uses: ./.github/actions/deploy_cloudFunction_template
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEPLOYTEST_8048D }}'
-          projectId: deploytest-8048d
-          channelId: live
-          firebaseToolsVersion: 12.9.1
-    
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          TEST_SECRET: ${{ secrets.TEST_SECRET }}
+
   Create_Tag_on_Success:
     runs-on: ubuntu-latest
     needs: Simulate_Test
