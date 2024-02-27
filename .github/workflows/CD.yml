@@ -41,8 +41,8 @@ jobs:
     steps:
       - name: Simulate_Run_Test
         run: |
-          echo "Test case success"
-          exit 0
+          echo "Test case Failed"
+          exit 1
         
   RollBack_Host_on_Failure:
     runs-on: ubuntu-latest
